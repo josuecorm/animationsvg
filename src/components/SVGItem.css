@@ -1,0 +1,9 @@
+.svg-container {
+  position: relative;
+}
+.svg-container object,
+.svg-container object img,
+svg {
+  max-width: 100%;
+  height: auto;
+}
