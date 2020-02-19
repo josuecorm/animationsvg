@@ -7,3 +7,14 @@ svg {
   max-width: 100%;
   height: auto;
 }
+.on {
+  fill: pink !important;
+  stroke: red !important;
+  stroke-width: 2 !important;
+}
+.path {
+  fill: #1882bf;
+  fill-opacity: 1;
+  fill-rule: nonzero;
+  stroke: none;
+}
