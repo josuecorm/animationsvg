@@ -18,9 +18,7 @@ class SVGFile extends Component {
   }
 
   componentDidMount() {
-    // this.loadFile();
-    this.createNodes();
-    // console.log(this.container.current.children);
+    this.loadFile();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -29,7 +27,7 @@ class SVGFile extends Component {
     }
   }
 
-  createNodes() {
+  createTimeline() {
     const { tweens } = this.props;
     const { current } = this.container;
 
@@ -59,6 +57,8 @@ class SVGFile extends Component {
         loaded: true,
         svgHTML: data
       });
+
+      this.createTimeline();
     } catch (error) {
       this.setState({
         loaded: false,
@@ -67,51 +67,29 @@ class SVGFile extends Component {
     }
   }
 
-  handleClick(event) {
-    event.stopPropagation();
+  // handleClick(event) {
+  //   event.stopPropagation();
 
-    if (event.target.tagName === "path") {
-      // console.log(event.target.className);
-      // event.target.className = "on";
-      event.target.setAttribute("class", "on");
-    }
-  }
-
-  // render() {
-  //   const { loaded, error, svgHTML } = this.state;
-
-  //   if (!loaded) return null;
-  //   if (error) return `Something went wrong: ${error.message}`;
-
-  //   return (
-  //     <div
-  //       className="svg-container"
-  //       onClick={this.handleClick}
-  //       dangerouslySetInnerHTML={{ __html: svgHTML }}
-  //       ref={this.container}
-  //     />
-  //   );
+  //   if (event.target.tagName === "path") {
+  //     // console.log(event.target.className);
+  //     // event.target.className = "on";
+  //     event.target.setAttribute("class", "on");
+  //   }
   // }
 
   render() {
+    const { loaded, error, svgHTML } = this.state;
+
+    if (!loaded) return null;
+    if (error) return `Something went wrong: ${error.message}`;
+
     return (
-      <div className="svg-container" onClick={this.handleClick}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1632 1056"
-          height="1056"
-          width="1632"
-          id="svg62"
-          version="1.1"
-          ref={this.container}
-        >
-          <path
-            id="path278"
-            className="path"
-            d="M 364.61,554.364 H 113.099 v 59.883 H 364.61 Z"
-          />
-        </svg>
-      </div>
+      <div
+        className="svg-container"
+        onClick={this.handleClick}
+        dangerouslySetInnerHTML={{ __html: svgHTML }}
+        ref={this.container}
+      />
     );
   }
 }
