@@ -1,0 +1,203 @@
+{
+  "url": "/img/workflow.svg",
+  "data": [
+    {
+      "type": "group",
+      "children": [
+        {
+          "targets": "#path278",
+          "type": "from",
+          "vars": {
+            "scaleX": 0.3,
+            "opacity": 0.3,
+            "duration": 3,
+            "ease": "Back.easeOut"
+          }
+        },
+        {
+          "targets": "#path264",
+          "type": "from",
+          "vars": {
+            "x": "-176px",
+            "scaleX": 0,
+            "opacity": 0.3,
+            "duration": 3,
+            "ease": "Back.easeOut"
+          }
+        },
+        {
+          "targets": "#g266",
+          "type": "from",
+          "vars": {
+            "x": "-313px",
+            "opacity": 0.3,
+            "duration": 3,
+            "ease": "Back.easeOut"
+          }
+        },
+        {
+          "targets": "#g446",
+          "type": "from",
+          "vars": {
+            "scale": 0,
+            "opacity": 0.3,
+            "duration": 2,
+            "ease": "back.out(2)",
+            "transformOrigin": "center"
+          }
+        },
+        {
+          "targets": ["#path438", "#path440", "#path442", "#path444"],
+          "type": "from",
+          "vars": {
+            "scaleX": 0,
+            "opacity": 0.3,
+            "duration": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "position": 2,
+      "children": [
+        {
+          "targets": "#path154",
+          "type": "from",
+          "vars": {
+            "scaleX": 0.32,
+            "opacity": 0.3,
+            "duration": 3
+          }
+        },
+        {
+          "targets": "#path152",
+          "type": "from",
+          "vars": {
+            "x": "-129px",
+            "scaleX": 0.1,
+            "opacity": 0.3,
+            "duration": 3
+          }
+        },
+        {
+          "targets": "#path150",
+          "type": "from",
+          "vars": {
+            "x": "-327px",
+            "scaleX": 0.1,
+            "opacity": 0.3,
+            "duration": 3
+          }
+        },
+        {
+          "targets": ["#path430", "#path432", "#path434", "#path436"],
+          "type": "from",
+          "vars": {
+            "scaleX": 0,
+            "opacity": 0.3,
+            "duration": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "position": 4,
+      "children": [
+        {
+          "targets": ["#path126", "#path112", "#path124"],
+          "type": "from",
+          "vars": {
+            "opacity": 0.7,
+            "duration": 1
+          }
+        },
+        {
+          "targets": "#path112",
+          "type": "from",
+          "vars": {
+            "scaleX": 0,
+            "duration": 1,
+            "ease": "back.out(1.7)"
+          }
+        },
+        {
+          "targets": "#path124",
+          "type": "from",
+          "vars": {
+            "x": "-150px",
+            "duration": 1,
+            "ease": "back.out(1.7)"
+          }
+        },
+        {
+          "targets": "#g485",
+          "type": "from",
+          "vars": {
+            "scale": 0,
+            "opacity": 0.3,
+            "duration": 2,
+            "ease": "back.out(3)",
+            "transformOrigin": "center"
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "children": [
+        {
+          "targets": ["#path438", "#path440", "#path442", "#path444"],
+          "type": "to",
+          "vars": {
+            "fill": "#61c3ae",
+            "duration": 1
+          }
+        },
+        {
+          "targets": ["#path430", "#path432", "#path434", "#path436"],
+          "type": "to",
+          "vars": {
+            "fill": "#aec6d6",
+            "duration": 1
+          }
+        },
+        {
+          "targets": "#path392",
+          "type": "to",
+          "vars": {
+            "fill": "#ed4a2f",
+            "duration": 1
+          }
+        },
+        {
+          "targets": ["#path460", "#path456"],
+          "type": "to",
+          "vars": {
+            "fill": "#1882bf",
+            "duration": 1
+          }
+        },
+        {
+          "targets": [
+            "#path396",
+            "#path400",
+            "#path404",
+            "#path408",
+            "#path412",
+            "#path416",
+            "#path420",
+            "#path424",
+            "#path428"
+          ],
+          "type": "to",
+          "vars": {
+            "stroke": "#ffffff",
+            "duration": 1
+          }
+        }
+      ]
+    }
+  ]
+}

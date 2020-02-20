@@ -24,36 +24,71 @@ class SVGFile extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // SVG nodes has been added to the DOM
     if (this.state.loaded !== prevState.loaded) {
-      console.log("componentDidUpdate");
+      this.createTimeline();
     }
   }
 
   createTimeline() {
-    const { tweens, controls, autoplay } = this.props;
-    const { current } = this.container;
+    const { animationData, controls, autoplay } = this.props;
 
-    if (!tweens.length) return;
+    if (!animationData.length) return;
 
-    const tweenArray = [];
-
+    // Create timeline master
     this.timeline = gsap.timeline({
       paused: true,
-      ...(this.props.controls && { onUpdate: this.updateSlider })
+      ...(controls && { onUpdate: this.updateSlider })
     });
 
-    tweens.forEach(tween => {
-      const { method, duration, targetId, vars } = tween;
-      const element = current.querySelector(`#${targetId}`);
-      if (element && vars) {
-        tweenArray.push(gsap[method](element, { ...vars, duration: duration }));
+    animationData.forEach(child => {
+      const { type, position } = child;
+      let gsap = null;
+
+      if (type === "group" && child.children && child.children.length) {
+        gsap = child.children.map(item => this.createTweenFromData(item));
+      } else {
+        gsap = this.createTweenFromData(child);
       }
+
+      if (gsap) this.timeline.add(gsap, position || "+=0");
     });
 
-    this.timeline.add(tweenArray);
-
+    // Once created play if prop set
     if (autoplay) this.timeline.play();
   }
+
+  createTweenFromData(data) {
+    const { type, targets, vars } = data;
+
+    if (!targets || !vars) return null;
+
+    switch (type) {
+      case "set":
+        return gsap.set(targets, vars);
+      case "to":
+        return gsap.to(targets, vars);
+      case "from":
+        return gsap.from(targets, vars);
+      case "fromTo":
+        return gsap.fromTo(targets, vars.from, vars.to);
+      default:
+        return null;
+    }
+  }
+
+  // validateChildDOM() {
+  //   const { current } = this.container;
+  //   let targets = null;
+  //   if (Array.isArray(target)) {
+  //     targets = target.map(target => {});
+  //   } else {
+  //     targets = current.querySelector(target);
+  //   }
+  //   if (target && params) {
+  //     tweenArray.push(gsap[type](target, { ...params }));
+  //   }
+  // }
 
   async loadFile() {
     try {
@@ -66,8 +101,6 @@ class SVGFile extends Component {
         loaded: true,
         svgHTML: data
       });
-
-      this.createTimeline();
     } catch (error) {
       this.setState({
         loaded: false,
@@ -91,9 +124,8 @@ class SVGFile extends Component {
 
     if (this.timeline) {
       this.timeline.progress(value).pause();
+      this.setState({ currentStepIndex: value });
     }
-
-    this.setState({ currentStepIndex: value });
   };
 
   updateSlider = () => {
@@ -117,6 +149,8 @@ class SVGFile extends Component {
           dangerouslySetInnerHTML={{ __html: svgHTML }}
           ref={this.container}
         />
+
+        {/* Show Timeline Controls */}
         {controls && (
           <div className="controls">
             <input
@@ -128,12 +162,18 @@ class SVGFile extends Component {
               step=".001"
               value={currentStepIndex}
               onChange={this.handleInputChange}
-            ></input>
+            />
             <div className="btn-group" role="group" aria-label="Basic example">
               <button
                 type="button"
                 className="btn btn-secondary"
-                onClick={() => this.timeline.play()}
+                onClick={() => {
+                  if (this.timeline.progress() !== 1) {
+                    this.timeline.play();
+                  } else {
+                    this.timeline.restart();
+                  }
+                }}
               >
                 play
               </button>
@@ -166,11 +206,11 @@ class SVGFile extends Component {
   }
 }
 
-export default SVGFile;
-
 SVGFile.propTypes = {
   url: PropTypes.string.isRequired,
-  tweens: PropTypes.array,
+  animationData: PropTypes.array,
   controls: PropTypes.bool,
   autoplay: PropTypes.bool
 };
+
+export default SVGFile;
