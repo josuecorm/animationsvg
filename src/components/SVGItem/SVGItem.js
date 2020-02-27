@@ -17,6 +17,8 @@ class SVGFile extends Component {
     };
     this.timeline = null;
     this.container = React.createRef();
+    this.updateSlider = this.updateSlider.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   componentDidMount() {
@@ -58,15 +60,15 @@ class SVGFile extends Component {
     if (autoplay) this.timeline.play();
   }
 
-  // TODO: validate each selector
+  // TODO: Validate each target selector
   createTweenFromData(data) {
     const { type, targets, vars } = data;
     const { current } = this.container;
-    
+
     if (!targets || !vars) return null;
-    
+
     // Validate target exits
-    if(!current.querySelectorAll(targets).length) return null
+    if (!current.querySelectorAll(targets).length) return null;
 
     switch (type) {
       case "set":
@@ -101,20 +103,20 @@ class SVGFile extends Component {
     }
   }
 
-  handleInputChange = event => {
+  handleInputChange(event) {
     const { value } = event.currentTarget;
 
     if (this.timeline) {
       this.timeline.progress(value).pause();
       this.setState({ currentStepIndex: value });
     }
-  };
+  }
 
-  updateSlider = () => {
+  updateSlider() {
     if (this.timeline) {
       this.setState({ currentStepIndex: this.timeline.progress() });
     }
-  };
+  }
 
   render() {
     const { controls } = this.props;
