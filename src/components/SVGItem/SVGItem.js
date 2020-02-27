@@ -58,10 +58,15 @@ class SVGFile extends Component {
     if (autoplay) this.timeline.play();
   }
 
+  // TODO: validate each selector
   createTweenFromData(data) {
     const { type, targets, vars } = data;
-
+    const { current } = this.container;
+    
     if (!targets || !vars) return null;
+    
+    // Validate target exits
+    if(!current.querySelectorAll(targets).length) return null
 
     switch (type) {
       case "set":
@@ -76,19 +81,6 @@ class SVGFile extends Component {
         return null;
     }
   }
-
-  // validateChildDOM() {
-  //   const { current } = this.container;
-  //   let targets = null;
-  //   if (Array.isArray(target)) {
-  //     targets = target.map(target => {});
-  //   } else {
-  //     targets = current.querySelector(target);
-  //   }
-  //   if (target && params) {
-  //     tweenArray.push(gsap[type](target, { ...params }));
-  //   }
-  // }
 
   async loadFile() {
     try {
@@ -106,16 +98,6 @@ class SVGFile extends Component {
         loaded: false,
         error: error
       });
-    }
-  }
-
-  handleClick(event) {
-    event.stopPropagation();
-
-    if (event.target.tagName === "path") {
-      // console.log(event.target.className);
-      // event.target.className = "on";
-      event.target.setAttribute("class", "on");
     }
   }
 
@@ -142,17 +124,17 @@ class SVGFile extends Component {
     if (error) return `Something went wrong: ${error.message}`;
 
     return (
-      <div className="wrapper">
+      <div className="svg-wrapper">
         <div
+          ref={this.container}
           className="svg-container"
           onClick={this.handleClick}
           dangerouslySetInnerHTML={{ __html: svgHTML }}
-          ref={this.container}
         />
 
         {/* Show Timeline Controls */}
         {controls && (
-          <div className="controls">
+          <div className="svg-controls">
             <input
               type="range"
               className="custom-range"

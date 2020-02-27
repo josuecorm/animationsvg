@@ -1,3 +1,6 @@
+.svg-wrapper {
+  position: relative;
+}
 .svg-container {
   position: relative;
 }
@@ -7,6 +10,10 @@ svg {
   max-width: 100%;
   height: auto;
 }
+/* .svg-controls {
+  position: absolute;
+  width: 100%;
+} */
 .on {
   fill: pink !important;
   stroke: red !important;
