@@ -10,7 +10,7 @@ const TypingText = () => {
       <div className="row no-gutters h-100">
         <div className="slider-content col-sm-6 align-self-start h-100">
           <div className="row no-gutters h-100 justify-content-md-center">
-            <div className="col-sm-8 align-self-center">
+            <div className="col col-md-10 col-xlg-8 align-self-center">
               <h2 className="mb-4">I want my CMS to:</h2>
               <TypingTextItem
                 text="Increase my content's ROI"

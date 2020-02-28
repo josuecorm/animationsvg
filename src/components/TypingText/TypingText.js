@@ -5,41 +5,93 @@ class TypingText extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.container = null;
+    this.container = React.createRef();
     this.cursor = React.createRef();
     this.words = [];
     this.chars = [];
+    this.resizeId = null;
+    this.timeline = null;
+    this.timelineProgress = 0;
+    this.handleWindowResize = this.handleWindowResize.bind(this);
+  }
+
+  componentDidMount() {
+    this.handleWindowResize();
+    window.addEventListener("resize", this.handleWindowResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleWindowResize);
+  }
+
+  handleWindowResize() {
+    this.destroyTimeline();
+    clearTimeout(this.resizeId);
+    this.resizeId = setTimeout(() => {
+      this.createTimeline();
+    }, 500);
+  }
+
+  destroyTimeline() {
+    console.log("destroyTimeline");
+    if (!this.timeline) return;
+
+    this.timelineProgress = this.timeline.progress();
+    this.timeline.kill();
+    this.timeline = null;
+    gsap.set(this.chars, { autoAlpha: 1 });
+    gsap.set(this.cursor.current, { autoAlpha: 0 });
+    this.container.current.removeAttribute("style");
+  }
+
+  createTimeline() {
+    console.log("createTimeline2");
+    const parentRec = this.container.current.getBoundingClientRect();
+    const cursorRec = this.cursor.current.getBoundingClientRect();
+
+    // Set container height
+    gsap.set(this.container.current, {
+      width: parentRec.width,
+      height: parentRec.height
+    });
+
+    // Positionar to start
+    gsap.set(this.cursor.current, {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: cursorRec.width,
+      height: cursorRec.height,
+      autoAlpha: 1
+    });
+
+    // Hide characters
+    gsap.set(this.chars, { autoAlpha: 0 });
+
+    // Create animation
     this.timeline = gsap.timeline({
       paused: true,
       repeatDelay: 3,
       repeat: -1
     });
+
+    this.chars.forEach((char, index) => {
+      // const charWidth = char.offsetWidth;
+      const charRec = char.getBoundingClientRect();
+
+      const coords = {
+        top: charRec.top - parentRec.top,
+        left: charRec.left - parentRec.left + charRec.width
+      };
+      const position = (index + 1) * 0.2;
+      this.timeline.set(this.cursor.current, coords, position);
+      this.timeline.set(char, { autoAlpha: 1 }, position);
+    });
+
+    // this.timeline.staggerTo(this.chars, 0, { autoAlpha: 1 }, 0.1);
+    this.timeline.progress(this.timelineProgress);
+    this.timeline.play();
   }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.createTimeline();
-    }, 200);
-  }
-
-  // updateDimensions() {
-  //   if (window.innerWidth < 500) {
-  //     this.setState({ width: 450, height: 102 });
-  //   } else {
-  //     let update_width = window.innerWidth - 100;
-  //     let update_height = Math.round(update_width / 4.4);
-  //     this.setState({ width: update_width, height: update_height });
-  //   }
-  // }
-
-  // componentDidMount() {
-  //   this.updateDimensions();
-  //   window.addEventListener("resize", this.updateDimensions.bind(this));
-  // }
-
-  // componentWillUnmount() {
-  //   window.removeEventListener("resize", this.updateDimensions.bind(this));
-  // }
 
   randomBgColor() {
     return `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(
@@ -47,7 +99,7 @@ class TypingText extends Component {
     )}, ${Math.floor(Math.random() * 256)}, 0.5)`;
   }
 
-  createTimeline() {
+  createTimeline2() {
     const parentRec = this.container.getBoundingClientRect();
     const cursorRec = this.cursor.current.getBoundingClientRect();
 
@@ -89,9 +141,10 @@ class TypingText extends Component {
 
   render() {
     const { text, className } = this.props;
+    const words = text.split(" ");
     return (
-      <div className={className} ref={div => (this.container = div)}>
-        {text.split(" ").map((word, index) => (
+      <div className={className} ref={this.container}>
+        {words.map((word, index) => (
           <React.Fragment key={`${word}${index}`}>
             <span className="word" ref={span => this.words.push(span)}>
               {word.split("").map((char, subindex) => (
@@ -105,7 +158,7 @@ class TypingText extends Component {
                 </span>
               ))}
             </span>
-            {index < text.split(" ").length - 1 ? " " : ""}
+            {index < words.length - 1 ? " " : ""}
           </React.Fragment>
         ))}
         <span
