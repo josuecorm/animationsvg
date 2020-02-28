@@ -28,14 +28,28 @@ body {
   padding: 0;
   /* overflow: hidden; */
 }
-body {
-  font-size: 0.875rem;
-  /* background-color: #f8f9fa; */
-}
 #root {
   height: 100%;
   position: relative;
 }
+
+/*
+* Typing Text Component
+*/
+.typing-text {
+  position: relative;
+}
+.typing-text .word,
+.typing-text .char {
+  position: "relative";
+  display: "inline-block";
+}
+/* .typing-text .cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+} */
 
 /*
 * Sidebar
@@ -72,26 +86,24 @@ body {
 
 .slider-content {
   background: rgba(244, 247, 251, 0.92);
+  font-size: 1.25rem;
+  line-height: 1.3em;
 }
 
-.slider-content h1 {
+.slider-content h2 {
   color: rgb(45, 62, 74);
-  font-size: 20px;
   font-weight: normal;
   text-transform: uppercase;
   letter-spacing: 2.56px;
-  line-height: 26px;
 }
 
 .slider-content .typing-text {
   font-family: "output_sansextra_light";
-  font-size: 70px;
+  font-size: 4.375rem;
   font-weight: 200;
-  line-height: 73px;
+  line-height: 1.043em;
 }
 
 .slider-content p {
-  font-size: 20px;
   font-weight: 300;
-  line-height: 26px;
 }
