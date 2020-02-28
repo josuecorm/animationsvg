@@ -1,15 +1,21 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import SVGPage from "./views/SVGPage";
-
+import {
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  BrowserRouter as Router
+} from "react-router-dom";
+import AnimatedSVGPage from "./views/AnimatedSVG";
+import IntroPage from "./views/IntroPage";
 import "./App.css";
 
 const App = () => {
   return (
     <Router>
       <div className="container-fluid">
-        <div className="row">
-          <nav className="col-md-3 col-xl-2 d-none d-md-block bg-light">
+        <div className="row no-gutters">
+          <nav className="col-md-3 col-xl-2 d-none d-md-block bg-light sidebar">
             <div className="sidebar-sticky">
               <ul className="nav flex-column">
                 <li className="nav-item">
@@ -25,14 +31,13 @@ const App = () => {
               </ul>
             </div>
           </nav>
-          <main role="main" className="col-md-9 col-xl-10 ml-sm-auto px-4">
+          <main role="main" className="col-md-9 col-xl-10 ml-sm-auto">
             <Switch>
-              <Route path="/">
-                <SVGPage />
+              <Route exact path="/">
+                <Redirect to="/svg" />
               </Route>
-              <Route path="/text">
-                <SVGPage />
-              </Route>
+              <Route exact path="/svg" component={AnimatedSVGPage} />
+              s<Route exact path="/text" component={IntroPage} />
             </Switch>
           </main>
         </div>
