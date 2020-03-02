@@ -38,7 +38,6 @@ body {
 */
 .typing-text {
   position: relative;
-  /* background: rgba(250, 235, 215, 0.5); */
 }
 .typing-text .word,
 .typing-text .char {

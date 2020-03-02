@@ -11,7 +11,7 @@ class TypingText extends Component {
     this.resizeId = null;
     this.timeline = null;
     this.cursorAnimation = null;
-    // this.timelineProgress = 0;
+    this.timelineProgress = 0;
     this.handleWindowResize = this.handleWindowResize.bind(this);
   }
 
@@ -43,7 +43,6 @@ class TypingText extends Component {
     this.cursorAnimation = null;
     this.cursor.current.removeAttribute("style");
     this.container.current.removeAttribute("style");
-    // this.chars.forEach(item => item.removeAttribute("style"));
   }
 
   createTimeline() {
@@ -84,7 +83,6 @@ class TypingText extends Component {
     });
 
     this.chars.forEach((char, index) => {
-      // const charWidth = char.offsetWidth;
       const charRec = char.getBoundingClientRect();
 
       const coords = {
@@ -96,7 +94,7 @@ class TypingText extends Component {
       this.timeline.set(char, { autoAlpha: 1 }, position);
     });
 
-    // this.timeline.progress(this.timelineProgress);
+    this.timeline.progress(this.timelineProgress);
     this.timeline.play();
   }
 
@@ -110,7 +108,11 @@ class TypingText extends Component {
     const { text, className } = this.props;
     const words = text.split(" ");
     return (
-      <div className={className} ref={this.container}>
+      <div
+        className={className}
+        ref={this.container}
+        // style={{ background: "rgba(250, 235, 215, 0.5)" }}
+      >
         {words.map((word, index) => (
           <React.Fragment key={`${word}${index}`}>
             <span className="word">
