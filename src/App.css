@@ -45,12 +45,11 @@ body {
   position: "relative";
   display: "inline-block";
 }
-/* .typing-text .cursor {
-  position: absolute;
-  top: 0;
-  left: 0;
+.typing-text .char,
+.typing-text .cursor {
+  opacity: 0;
   visibility: hidden;
-} */
+}
 
 /*
 * Sidebar

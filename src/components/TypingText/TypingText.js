@@ -7,11 +7,11 @@ class TypingText extends Component {
     this.state = {};
     this.container = React.createRef();
     this.cursor = React.createRef();
-    this.words = [];
     this.chars = [];
     this.resizeId = null;
     this.timeline = null;
-    this.timelineProgress = 0;
+    this.cursorAnimation = null;
+    // this.timelineProgress = 0;
     this.handleWindowResize = this.handleWindowResize.bind(this);
   }
 
@@ -26,6 +26,7 @@ class TypingText extends Component {
 
   handleWindowResize() {
     this.destroyTimeline();
+    // debounce
     clearTimeout(this.resizeId);
     this.resizeId = setTimeout(() => {
       this.createTimeline();
@@ -33,19 +34,19 @@ class TypingText extends Component {
   }
 
   destroyTimeline() {
-    console.log("destroyTimeline");
     if (!this.timeline) return;
 
     this.timelineProgress = this.timeline.progress();
     this.timeline.kill();
     this.timeline = null;
-    gsap.set(this.chars, { autoAlpha: 1 });
-    gsap.set(this.cursor.current, { autoAlpha: 0 });
+    this.cursorAnimation.kill();
+    this.cursorAnimation = null;
+    this.cursor.current.removeAttribute("style");
     this.container.current.removeAttribute("style");
+    // this.chars.forEach(item => item.removeAttribute("style"));
   }
 
   createTimeline() {
-    console.log("createTimeline2");
     const parentRec = this.container.current.getBoundingClientRect();
     const cursorRec = this.cursor.current.getBoundingClientRect();
 
@@ -55,7 +56,7 @@ class TypingText extends Component {
       height: parentRec.height
     });
 
-    // Positionar to start
+    // Set cursor
     gsap.set(this.cursor.current, {
       position: "absolute",
       top: 0,
@@ -65,10 +66,17 @@ class TypingText extends Component {
       autoAlpha: 1
     });
 
+    // Create cursor animation
+    this.cursorAnimation = gsap.fromTo(
+      this.cursor.current,
+      { autoAlpha: 0 },
+      { autoAlpha: 1, repeat: -1, ease: "steps(1)", duration: 0.5 }
+    );
+
     // Hide characters
     gsap.set(this.chars, { autoAlpha: 0 });
 
-    // Create animation
+    // Create timeline
     this.timeline = gsap.timeline({
       paused: true,
       repeatDelay: 3,
@@ -83,13 +91,12 @@ class TypingText extends Component {
         top: charRec.top - parentRec.top,
         left: charRec.left - parentRec.left + charRec.width
       };
-      const position = (index + 1) * 0.2;
+      const position = (index + 1) * 0.1;
       this.timeline.set(this.cursor.current, coords, position);
       this.timeline.set(char, { autoAlpha: 1 }, position);
     });
 
-    // this.timeline.staggerTo(this.chars, 0, { autoAlpha: 1 }, 0.1);
-    this.timeline.progress(this.timelineProgress);
+    // this.timeline.progress(this.timelineProgress);
     this.timeline.play();
   }
 
@@ -99,46 +106,6 @@ class TypingText extends Component {
     )}, ${Math.floor(Math.random() * 256)}, 0.5)`;
   }
 
-  createTimeline2() {
-    const parentRec = this.container.getBoundingClientRect();
-    const cursorRec = this.cursor.current.getBoundingClientRect();
-
-    gsap.set(this.chars, { autoAlpha: 0 });
-
-    gsap.set(this.cursor.current, {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: cursorRec.width,
-      height: cursorRec.height
-    });
-
-    // const char = this.chars[8];
-    // const parentRec = this.container.getBoundingClientRect();
-    // const charRec = char.getBoundingClientRect();
-    // console.log("charRec", charRec);
-    // const coords = {
-    //   top: charRec.top - parentRec.top,
-    //   left: charRec.left - parentRec.left + charRec.width
-    // };
-
-    this.chars.forEach((char, index) => {
-      // const charWidth = char.offsetWidth;
-      const charRec = char.getBoundingClientRect();
-
-      const coords = {
-        top: charRec.top - parentRec.top,
-        left: charRec.left - parentRec.left + charRec.width
-      };
-      const position = (index + 1) * 0.2;
-      this.timeline.set(this.cursor.current, coords, position);
-      this.timeline.set(char, { autoAlpha: 1 }, position);
-    });
-
-    // this.timeline.staggerTo(this.chars, 0, { autoAlpha: 1 }, 0.1);
-    this.timeline.play();
-  }
-
   render() {
     const { text, className } = this.props;
     const words = text.split(" ");
@@ -146,7 +113,7 @@ class TypingText extends Component {
       <div className={className} ref={this.container}>
         {words.map((word, index) => (
           <React.Fragment key={`${word}${index}`}>
-            <span className="word" ref={span => this.words.push(span)}>
+            <span className="word">
               {word.split("").map((char, subindex) => (
                 <span
                   key={`${word}${char}${subindex}`}
