@@ -6,8 +6,9 @@ import {
   Redirect,
   BrowserRouter as Router
 } from "react-router-dom";
-import AnimatedSVGPage from "./views/AnimatedSVG";
+import SVGPage from "./views/SVGPage";
 import IntroPage from "./views/IntroPage";
+import WorkflowPage from "./views/WorkflowPage";
 import "./App.css";
 
 const App = () => {
@@ -19,8 +20,8 @@ const App = () => {
             <div className="sidebar-sticky">
               <ul className="nav flex-column">
                 <li className="nav-item">
-                  <Link to="/" className="nav-link">
-                    Animated SVG
+                  <Link to="/workflow" className="nav-link">
+                    Animated Workflow
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -34,10 +35,11 @@ const App = () => {
           <main role="main" className="col-md-9 col-xl-10 ml-sm-auto">
             <Switch>
               <Route exact path="/">
-                <Redirect to="/svg" />
+                <Redirect to="/workflow" />
               </Route>
-              <Route exact path="/svg" component={AnimatedSVGPage} />
-              s<Route exact path="/text" component={IntroPage} />
+              <Route exact path="/workflow" component={WorkflowPage} />
+              <Route exact path="/svg" component={SVGPage} />
+              <Route exact path="/text" component={IntroPage} />
             </Switch>
           </main>
         </div>

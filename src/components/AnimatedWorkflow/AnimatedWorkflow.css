@@ -1,0 +1,8 @@
+.svg-container {
+  position: relative;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  height: auto;
+}
